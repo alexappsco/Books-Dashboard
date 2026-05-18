@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Youni</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Public Sans', sans-serif; }
+        .sidebar-bg { background: rgba(136, 108, 232, 0.1); }
+        .header-bg { background: rgba(136, 108, 232, 1); }
+        .active-link { background: rgba(136, 108, 232, 0.3); font-weight: 700; }
+        .nav-link { font-size: 14px; font-weight: 500; transition: all 0.3s; }
+        
+        .dropdown-actions { 
+            display: none; 
+            position: absolute; 
+            left: 0; 
+            top: 40px; 
+            z-index: 9999; 
+            min-width: 140px; 
+            background: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f3f4f6;
+            border-radius: 12px;
+        }
+        .dropdown-actions.show { display: block; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="header-bg h-16 w-full flex items-center justify-between px-4 md:px-8 fixed top-0 z-[100]">
+        <div class="flex items-center">
+            <img src="imgs/logoyouni.png" alt="Youni" class="h-8 md:h-10 brightness-0 invert">
+        </div>
+
+        <div class="flex items-center gap-4 text-white">
+            <div class="flex items-center gap-4 border-l pl-4 border-white/20">
+                <div class="relative cursor-pointer">
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-[10px] rounded-full px-1">1</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
+                        <img src="https://ui-avatars.com/api/?name=User" alt="">
+                    </div>
+                    <span class="hidden md:block text-sm font-medium">اسم المستخدم</span>
+                </div>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-white outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-[80] hidden"></div>
+
+    <div class="flex pt-16">
+<aside id="sidebar" class="w-64 h-[calc(100vh-64px)] fixed right-0 top-16 z-[90] overflow-y-auto transition-transform duration-300 md:translate-x-0 translate-x-full shadow-2xl md:shadow-none bg-white md:bg-[rgba(136,108,232,0.1)]">
+        <nav class="mt-6 px-4 space-y-1">
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/main.svg" class="w-5 h-5" alt="">
+                    <span>الرئيسية</span>
+                </a>
+
+                <a href="#" class="nav-link active-link flex items-center gap-3 p-3 rounded-xl text-purple-800">
+                    <img src="imgs/icons/manage-branch.svg" class="w-5 h-5" alt="">
+                    <span>إدارة الفروع</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/offers.svg" class="w-5 h-5" alt="">
+                    <span>العروض</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/managepackage.svg" class="w-5 h-5" alt="">
+                    <span>إدارة الباقات</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/customer.svg" class="w-5 h-5" alt="">
+                    <span>العملاء</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/manageemploye.svg" class="w-5 h-5" alt="">
+                    <span>إدارة الموظفين</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/ads.svg" class="w-5 h-5" alt="">
+                    <span>الاعلانات</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/reports.svg" class="w-5 h-5" alt="">
+                    <span>التقارير</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/suport.svg" class="w-5 h-5" alt="">
+                    <span>الدعم الفني</span>
+                </a>
+
+                <div class=" border-purple-200">
+                    <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                        <img src="imgs/icons/profile.svg" class="w-5 h-5" alt="">
+                        <span>الملف الشخصي</span>
+                    </a>
+                    <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-red-500 hover:bg-red-50 mt-2">
+                        <img src="imgs/icons/logout.svg" class="w-5 h-5" alt="">
+                        <span>تسجيل الخروج</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+    <main class="flex-1 md:mr-64 p-4 md:p-8 min-h-screen w-full overflow-x-hidden">
+    <!-- HEADER -->
+    <div class="flex flex-row justify-between items-center gap-3 mb-8">
+
+    <h1 class="text-[18px] font-bold text-gray-800 whitespace-nowrap">
+        تذاكر الدعم السابقة
+    </h1>
+
+  <button
+    onclick="openTicketModal()"
+    class="bg-[#886CE8] text-white font-bold text-[16px] px-4 sm:px-6 h-11 sm:h-12 rounded-xl flex items-center justify-center gap-2 shadow-md hover:bg-[#7758E6] transition whitespace-nowrap"
+>
+    <img src="/imgs/icons/send.svg" alt="">
+    إرسال تذكرة جديدة
+</button>
+
+</div>
+
+    <!-- MAIN CARD -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        
+        <!-- TABS (Scrollable on mobile) -->
+        <div class="flex items-center gap-6 px-6 pt-5 border-b border-gray-100 overflow-x-auto no-scrollbar">
+            <button class="flex items-center gap-2 pb-3 border-b-2 border-gray-900 text-gray-900 font-semibold whitespace-nowrap">
+                <span class="bg-gray-900 text-white text-[10px] px-2 py-0.5 rounded-md">80</span>
+                الكل
+            </button>
+
+            <button class="flex items-center gap-2 pb-3 text-gray-500 hover:text-gray-900 font-semibold whitespace-nowrap">
+                <span class="bg-green-100 text-green-600 text-[10px] px-2 py-0.5 rounded-md">22</span>
+                تم الرد
+            </button>
+
+            <button class="flex items-center gap-2 pb-3 text-gray-500 hover:text-gray-900 font-semibold whitespace-nowrap">
+                <span class="bg-orange-100 text-orange-500 text-[10px] px-2 py-0.5 rounded-md">22</span>
+                قيد المراجعة
+            </button>
+        </div>
+
+        <!-- FILTER BAR -->
+        <div class="px-6 py-4 border-b border-gray-50">
+            <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
+                
+                <!-- Search Input -->
+                <div class="relative flex-1">
+                    <input
+                        type="text"
+                        placeholder="بحث في المرتجعات ..."
+                        class="w-full h-[46px] rounded-xl border border-gray-200 pr-11 pl-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#886CE8]/20 focus:border-[#886CE8] transition-all"
+                    />
+                    <svg class="w-5 h-5 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+
+                <!-- Filters Group -->
+                <div class="flex flex-wrap sm:flex-nowrap items-center gap-3">
+                    <!-- Status Select -->
+                    <div class="relative w-full sm:w-[140px]">
+                        <select class="w-full h-[46px] rounded-xl border border-gray-200 px-4 text-sm text-gray-600 appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-[#886CE8]/20 cursor-pointer">
+                            <option>الخدمة</option>
+                            <option> </option>
+                            <option></option>
+                        </select>
+                        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+
+                    <!-- service Input -->
+                     <div class="relative w-full sm:w-[140px]">
+                        <select class="w-full h-[46px] rounded-xl border border-gray-200 px-4 text-sm text-gray-600 appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-[#886CE8]/20 cursor-pointer">
+                            <option>الحالة</option>
+                            <option>الكل</option>
+                            <option>تم الرد</option>
+                            <option>قيد المراجعة</option>
+                        </select>
+                        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+
+                    <!-- More Actions Button -->
+                    <button class="w-12 h-[46px] flex items-center justify-center rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6h.01M12 12h.01M12 18h.01" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+      <!-- TABLE SECTION -->
+<div class="overflow-x-auto w-full">
+    <table class="w-full min-w-[950px] text-right border-collapse">
+
+        <thead class="bg-[#F9FAFB]">
+            <tr class="text-[#667085] text-[13px]">
+
+                <th class="p-4 font-semibold min-w-[180px]">
+                    <div class="flex items-center gap-3">
+                        <input
+                            type="checkbox"
+                            class="w-4 h-4 rounded border-gray-300 text-[#886CE8] focus:ring-[#886CE8]"
+                        >
+                        <span>رقم التذكرة</span>
+                    </div>
+                </th>
+
+                <th class="p-4 font-semibold text-center min-w-[180px]">
+                    تاريخ الطلب
+                </th>
+
+                <th class="p-4 font-semibold min-w-[180px]">
+                    العنوان
+                </th>
+
+                <th class="p-4 font-semibold min-w-[180px]">
+                    حالة الطلب
+                </th>
+
+                <th class="p-4 w-[70px]"></th>
+
+            </tr>
+        </thead>
+
+        <tbody class="divide-y divide-[#EAECF0] bg-white">
+
+            <!-- Row 1 -->
+            <tr class="hover:bg-[#FAFAFA] transition-colors">
+
+                <!-- رقم التذكرة -->
+                <td class="p-4 whitespace-nowrap">
+                    <div class="flex items-center gap-4">
+
+                        <input
+                            type="checkbox"
+                            class="w-5 h-5 rounded-md border-[#CBD5E1] text-[#886CE8] focus:ring-[#886CE8]"
+                        >
+
+                        <span class="text-[14px] font-normal text-[#101828]">
+                            001
+                        </span>
+
+                    </div>
+                </td>
+
+                <!-- التاريخ -->
+                <td class="p-4 text-center whitespace-nowrap">
+                    <span class="text-[14px] font-normal text-[#344054]">
+                        05-08-2025
+                    </span>
+                </td>
+
+                <!-- العنوان -->
+                <td class="p-4 whitespace-nowrap">
+                    <span class="text-[14px] font-normal text-[#101828]">
+                        مشكله في العرض #1234
+                    </span>
+                </td>
+
+                <!-- الحالة -->
+               <td class="p-4 whitespace-nowrap">
+    <span class="inline-flex items-center justify-center
+        h-[36px]
+        px-4
+        rounded-xl
+        bg-[#DCFCE7]
+        text-[#16A34A]
+        text-[14px]
+        font-bold">
+        تم الرد
+    </span>
+</td>
+
+                <!-- الاجراءات -->
+                <td class="p-4 text-center relative">
+
+                    <button
+                        onclick="toggleActions(event)"
+                        class="w-9 h-9 inline-flex items-center justify-center rounded-xl hover:bg-gray-100 transition"
+                    >
+                        <svg class="w-5 h-5 text-[#98A2B3]" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                        </svg>
+                    </button>
+
+                </td>
+
+            </tr>
+
+            <!-- Row 2 -->
+            <tr class="hover:bg-[#FAFAFA] transition-colors">
+
+                <!-- رقم التذكرة -->
+                <td class="p-4 whitespace-nowrap">
+                    <div class="flex items-center gap-4">
+
+                        <input
+                            type="checkbox"
+                            class="w-5 h-5 rounded-md border-[#CBD5E1] text-[#886CE8] focus:ring-[#886CE8]"
+                        >
+
+                        <span class="text-[14px] font-normal text-[#101828]">
+                            002
+                        </span>
+
+                    </div>
+                </td>
+
+                <!-- التاريخ -->
+                <td class="p-4 text-center whitespace-nowrap">
+                    <span class="text-[14px] font-normal text-[#344054]">
+                        06-08-2025
+                    </span>
+                </td>
+
+                <!-- العنوان -->
+                <td class="p-4 whitespace-nowrap">
+                    <span class="text-[14px] font-normal text-[#101828]">
+                        تعديل بيانات الحساب
+                    </span>
+                </td>
+
+                <!-- الحالة -->
+              <td class="p-4 whitespace-nowrap">
+    <span class="inline-flex items-center justify-center
+        h-[36px]
+        px-4
+        rounded-xl
+        bg-[#FFF4E5]
+        text-[#B76E00]
+        text-[14px]
+        font-bold">
+        قيد المراجعة
+    </span>
+</td>
+
+                <!-- الاجراءات -->
+                <td class="p-4 text-center relative">
+
+                    <button
+                        onclick="toggleActions(event)"
+                        class="w-9 h-9 inline-flex items-center justify-center rounded-xl hover:bg-gray-100 transition"
+                    >
+                        <svg class="w-5 h-5 text-[#98A2B3]" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                        </svg>
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+</div>
+
+        <!-- PAGINATION SECTION -->
+        <div class="px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#FDFDFF] border-t border-gray-50">
+            <div class="flex items-center gap-6 text-sm text-gray-500 order-2 sm:order-1">
+                <div class="flex gap-2">
+                    <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-white hover:text-[#886CE8] transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-white hover:text-[#886CE8] transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+                <span>عرض <strong>1-10</strong> من أصل <strong>80</strong></span>
+            </div>
+
+            <div class="flex items-center gap-4 order-1 sm:order-2">
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <span>الصفوف لكل صفحة:</span>
+                    <select class="bg-white border border-gray-200 rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-[#886CE8]">
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('translate-x-full');
+            overlay.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        function toggleActions(event) {
+            event.stopPropagation();
+            const allMenus = document.querySelectorAll('.dropdown-actions');
+            const currentMenu = event.currentTarget.nextElementSibling;
+            
+            allMenus.forEach(menu => {
+                if(menu !== currentMenu) menu.classList.remove('show');
+            });
+            currentMenu.classList.toggle('show');
+        }
+
+        window.onclick = function() {
+            document.querySelectorAll('.dropdown-actions').forEach(menu => menu.classList.remove('show'));
+        }
+    </script>
+
+<!-- MODAL -->
+<div
+    id="ticketModal"
+    class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/40 backdrop-blur-[2px] p-4"
+>
+
+    <!-- Modal Box -->
+    <div
+        class="bg-white w-full max-w-[720px] rounded-[28px] shadow-2xl relative overflow-hidden animate-[fadeIn_.2s_ease]"
+    >
+
+        <!-- Content -->
+        <div class="p-5 sm:p-8">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between gap-4 mb-8" dir="rtl">
+
+    <!-- Title -->
+    <h2 class="text-[22px] font-bold text-[#101828] text-right">
+        إرسال شكوى للدعم الفني
+    </h2>
+
+    <!-- Close -->
+    <button
+        onclick="closeTicketModal()"
+        class="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-gray-100 transition shrink-0"
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5 text-[#667085]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+            />
+        </svg>
+    </button>
+
+</div>
+
+            <!-- Form -->
+            <div class="space-y-6">
+
+                <!-- Subject -->
+                <div>
+                    <label class="block text-[16px] font-normal text-[#344054] mb-2 text-right">
+                        عنوان الشكوى
+                    </label>
+
+                    <input
+                        type="text"
+                        placeholder="اكتب عنوان واضح للمشكلة"
+                        class="w-full h-[56px] rounded-2xl border border-[#D0D5DD] px-4 text-[15px] outline-none focus:border-[#886CE8] transition"
+                    >
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-[16px] font-normal text-[#344054] mb-2 text-right">
+                        وصف الشكوى
+                    </label>
+
+                    <textarea
+                        placeholder="يرجى كتابة تفاصيل شكواك بوضوح"
+                        class="w-full h-[140px] rounded-2xl border border-[#D0D5DD] p-4 text-[15px] outline-none resize-none focus:border-[#886CE8] transition"
+                    ></textarea>
+                </div>
+
+                <!-- Submit -->
+               <div class="pt-2 flex justify-end">
+    <button
+        class="bg-[#886CE8] hover:bg-[#7758E6] transition text-white font-bold text-[14px] h-[48px] px-10 rounded-xl"
+    >
+        إرسال
+    </button>
+</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+    const ticketModal = document.getElementById("ticketModal");
+
+    function openTicketModal() {
+        ticketModal.classList.remove("hidden");
+        ticketModal.classList.add("flex");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeTicketModal() {
+        ticketModal.classList.add("hidden");
+        ticketModal.classList.remove("flex");
+        document.body.style.overflow = "auto";
+    }
+
+    // Close when clicking outside
+    ticketModal.addEventListener("click", function (e) {
+        if (e.target === ticketModal) {
+            closeTicketModal();
+        }
+    });
+</script>
+
+
+</body>
+</html>

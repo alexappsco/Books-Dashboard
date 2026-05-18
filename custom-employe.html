@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Youni</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .sidebar-bg { background: rgba(136, 108, 232, 0.1); }
+        .header-bg { background: rgba(136, 108, 232, 1); }
+        .active-link { background: rgba(136, 108, 232, 0.3); font-weight: 700; }
+        .nav-link { font-size: 14px; font-weight: 500; transition: all 0.3s; }
+        
+        .dropdown-actions { 
+            display: none; 
+            position: absolute; 
+            left: 0; 
+            top: 40px; 
+            z-index: 9999; 
+            min-width: 140px; 
+            background: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f3f4f6;
+            border-radius: 12px;
+        }
+        .dropdown-actions.show { display: block; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="header-bg h-16 w-full flex items-center justify-between px-4 md:px-8 fixed top-0 z-[100]">
+        <div class="flex items-center">
+            <img src="imgs/logoyouni.png" alt="Youni" class="h-8 md:h-10 brightness-0 invert">
+        </div>
+
+        <div class="flex items-center gap-4 text-white">
+            <div class="flex items-center gap-4 border-l pl-4 border-white/20">
+                <div class="relative cursor-pointer">
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-[10px] rounded-full px-1">1</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
+                        <img src="https://ui-avatars.com/api/?name=User" alt="">
+                    </div>
+                    <span class="hidden md:block text-sm font-medium">اسم المستخدم</span>
+                </div>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-white outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-[80] hidden"></div>
+
+    <div class="flex pt-16">
+<aside id="sidebar" class="w-64 h-[calc(100vh-64px)] fixed right-0 top-16 z-[90] overflow-y-auto transition-transform duration-300 md:translate-x-0 translate-x-full shadow-2xl md:shadow-none bg-white md:bg-[rgba(136,108,232,0.1)]">
+        <nav class="mt-6 px-4 space-y-1">
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/main.svg" class="w-5 h-5" alt="">
+                    <span>الرئيسية</span>
+                </a>
+
+                <a href="#" class="nav-link active-link flex items-center gap-3 p-3 rounded-xl text-purple-800">
+                    <img src="imgs/icons/manage-branch.svg" class="w-5 h-5" alt="">
+                    <span>إدارة الفروع</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/offers.svg" class="w-5 h-5" alt="">
+                    <span>العروض</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/managepackage.svg" class="w-5 h-5" alt="">
+                    <span>إدارة الباقات</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/customer.svg" class="w-5 h-5" alt="">
+                    <span>العملاء</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/manageemploye.svg" class="w-5 h-5" alt="">
+                    <span>إدارة الموظفين</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/ads.svg" class="w-5 h-5" alt="">
+                    <span>الاعلانات</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/reports.svg" class="w-5 h-5" alt="">
+                    <span>التقارير</span>
+                </a>
+
+                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                    <img src="imgs/icons/suport.svg" class="w-5 h-5" alt="">
+                    <span>الدعم الفني</span>
+                </a>
+
+                <div class=" border-purple-200">
+                    <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-purple-100">
+                        <img src="imgs/icons/profile.svg" class="w-5 h-5" alt="">
+                        <span>الملف الشخصي</span>
+                    </a>
+                    <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-xl text-red-500 hover:bg-red-50 mt-2">
+                        <img src="imgs/icons/logout.svg" class="w-5 h-5" alt="">
+                        <span>تسجيل الخروج</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+    <main class="flex-1 md:mr-64 min-h-screen bg-[#F8F9FB] p-3 sm:p-4 md:p-6 lg:p-8" dir="rtl">
+
+    <!-- Header -->
+    <div class="flex flex-col-reverse md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+  <h1 class="text-2xl md:text-4xl font-bold text-[#1F2937]">
+            إضافة موظف جديد مخصص
+        </h1>
+        <!-- Buttons -->
+        <div class="flex items-center gap-3">
+
+            <button
+                class="h-11 px-8 rounded-xl border border-red-400 bg-white text-red-500 text-sm md:text-base font-medium hover:bg-red-50 transition">
+                إلغاء
+            </button>
+
+            <button
+                class="h-11 px-8 rounded-xl bg-[#7C5CFC] text-white text-sm md:text-base font-medium shadow-sm hover:opacity-90 transition">
+                حفظ
+            </button>
+
+        </div>
+
+        <!-- Title -->
+      
+
+    </div>
+
+    <!-- Main Box -->
+    <section
+        class="bg-white rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.05)] p-3 sm:p-4 md:p-6">
+
+        <!-- Section Title -->
+        <div class="flex mb-5">
+            <h2 class="text-xl md:text-2xl font-semibold text-[#0F4C5C]">
+                الصلاحيات
+            </h2>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-hidden rounded-2xl bg-white">
+
+            <!-- Header -->
+            <div
+                class="grid grid-cols-2 bg-[#F4F6F8]">
+
+                <div
+                    class="p-4 text-right text-sm md:text-lg font-semibold text-[#374151]">
+                    الصفحات
+                </div>
+
+                <div
+                    class="p-4 text-center text-sm md:text-lg font-semibold text-[#374151]">
+                    الصلاحيات
+                </div>
+
+            </div>
+
+            <!-- Rows -->
+            <div>
+
+                <!-- Row -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 items-center border-b border-[#E5E7EB] bg-white">
+
+                    <div class="p-4 text-right text-[#374151]">
+                        الصفحة الرئيسية
+                    </div>
+
+                    <div
+                        class="p-4 flex flex-wrap items-center justify-start md:justify-center gap-4 md:gap-6">
+
+                        <label class="flex items-center gap-2">
+                            <span>عرض</span>
+                            <input type="checkbox"
+                                class="w-5 h-5 rounded border-gray-300 text-[#7C5CFC] focus:ring-[#7C5CFC]">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>إضافة</span>
+                            <input type="checkbox"
+                                class="w-5 h-5 rounded border-gray-300 text-[#7C5CFC] focus:ring-[#7C5CFC]">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>تعديل</span>
+                            <input type="checkbox"
+                                class="w-5 h-5 rounded border-gray-300 text-[#7C5CFC] focus:ring-[#7C5CFC]">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>حذف</span>
+                            <input type="checkbox"
+                                class="w-5 h-5 rounded border-gray-300 text-[#7C5CFC] focus:ring-[#7C5CFC]">
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- Row -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 items-center border-b border-[#E5E7EB] bg-white">
+
+                    <div class="p-4 text-right text-[#374151]">
+                        المنتجات
+                    </div>
+
+                    <div
+                        class="p-4 flex flex-wrap items-center justify-start md:justify-center gap-4 md:gap-6">
+
+                        <label class="flex items-center gap-2">
+                            <span>عرض</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>إضافة</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>تعديل</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>حذف</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- Row -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 items-center border-b border-[#E5E7EB] bg-white">
+
+                    <div class="p-4 text-right text-[#374151]">
+                        الطلبات
+                    </div>
+
+                    <div
+                        class="p-4 flex flex-wrap items-center justify-start md:justify-center gap-4 md:gap-6">
+
+                        <label class="flex items-center gap-2">
+                            <span>عرض</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>إضافة</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>تعديل</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>حذف</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- Row -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 items-center border-b border-[#E5E7EB] bg-white">
+
+                    <div class="p-4 text-right text-[#374151]">
+                        طلبات العروض الجديدة
+                    </div>
+
+                    <div
+                        class="p-4 flex flex-wrap items-center justify-start md:justify-center gap-4 md:gap-6">
+
+                        <label class="flex items-center gap-2">
+                            <span>عرض</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>إضافة</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>تعديل</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>حذف</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- Row -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 items-center border-b border-[#E5E7EB] bg-white">
+
+                    <div class="p-4 text-right text-[#374151]">
+                        الأصناف المميزة
+                    </div>
+
+                    <div
+                        class="p-4 flex flex-wrap items-center justify-start md:justify-center gap-4 md:gap-6">
+
+                        <label class="flex items-center gap-2">
+                            <span>عرض</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>إضافة</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>تعديل</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>حذف</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- Row -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 items-center border-b border-[#E5E7EB] bg-white">
+
+                    <div class="p-4 text-right text-[#374151]">
+                        الكتالوجات
+                    </div>
+
+                    <div
+                        class="p-4 flex flex-wrap items-center justify-start md:justify-center gap-4 md:gap-6">
+
+                        <label class="flex items-center gap-2">
+                            <span>عرض</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>إضافة</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>تعديل</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>حذف</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- Row -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 items-center border-b border-[#E5E7EB] bg-white">
+
+                    <div class="p-4 text-right text-[#374151]">
+                        العملاء
+                    </div>
+
+                    <div
+                        class="p-4 flex flex-wrap items-center justify-start md:justify-center gap-4 md:gap-6">
+
+                        <label class="flex items-center gap-2">
+                            <span>عرض</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>إضافة</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>تعديل</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>حذف</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- Row -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 items-center bg-white">
+
+                    <div class="p-4 text-right text-[#374151]">
+                        العلامات التجارية
+                    </div>
+
+                    <div
+                        class="p-4 flex flex-wrap items-center justify-start md:justify-center gap-4 md:gap-6">
+
+                        <label class="flex items-center gap-2">
+                            <span>عرض</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>إضافة</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>تعديل</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                        <label class="flex items-center gap-2">
+                            <span>حذف</span>
+                            <input type="checkbox" class="w-5 h-5 rounded border-gray-300">
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+     
+    </section>
+   <div class="flex  mt-6">
+            <button
+                class="flex items-center gap-1 text-base font-bold text-[#1F2937] hover:text-[#7C5CFC] transition">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                       d="M9 5l7 7-7 7" />
+                </svg>
+                السابق
+            </button>
+        </div>
+</main>
+
+<script>
+    function toggleRolesDropdown() {
+        const dropdown = document.getElementById("rolesDropdown");
+        const arrow = document.getElementById("rolesArrow");
+        dropdown.classList.toggle("hidden");
+        arrow.classList.toggle("rotate-180");
+    }
+</script>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('translate-x-full');
+            overlay.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        function toggleActions(event) {
+            event.stopPropagation();
+            const allMenus = document.querySelectorAll('.dropdown-actions');
+            const currentMenu = event.currentTarget.nextElementSibling;
+            
+            allMenus.forEach(menu => {
+                if(menu !== currentMenu) menu.classList.remove('show');
+            });
+            currentMenu.classList.toggle('show');
+        }
+
+        window.onclick = function() {
+            document.querySelectorAll('.dropdown-actions').forEach(menu => menu.classList.remove('show'));
+        }
+    </script>
+
+</body>
+</html>
