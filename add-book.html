@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة كتاب جديد - Youni</title>
+    <link href="css/output.css" rel="stylesheet">
+    <link href="css/book-form.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .header-bg { background: rgba(136, 108, 232, 1); }
+        .active-link { background: rgba(136, 108, 232, 0.3); font-weight: 700; }
+        .nav-link { font-size: 14px; font-weight: 500; transition: all 0.3s; }
+        .select-wrap { position: relative; }
+        .select-wrap svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+        .keywords-wrap { min-height: 52px; border: 1px solid #E5E7EB; border-radius: 12px; padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: #fff; }
+        .keywords-wrap:focus-within { border-color: #886CE8; box-shadow: 0 0 0 3px rgba(136,108,232,0.12); }
+        .keywords-wrap input { border: none; outline: none; flex: 1; min-width: 140px; height: 32px; font-size: 14px; text-align: right; background: transparent; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="header-bg h-16 w-full flex items-center justify-between px-4 md:px-8 fixed top-0 z-[100]">
+        <div class="flex items-center"><img src="imgs/logoHeader.png" alt="Youni" class="h-8 md:h-10"></div>
+        <div class="flex items-center gap-4 text-white">
+            <div class="flex items-center gap-4 border-l pl-4 border-white/20">
+                <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden"><img src="https://ui-avatars.com/api/?name=User" alt=""></div>
+                <span class="hidden md:block text-sm font-medium">اسم المستخدم</span>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-white"><svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        </div>
+    </header>
+
+    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-[80] hidden"></div>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="w-64 h-[calc(100vh-64px)] fixed right-0 top-16 z-[90] overflow-y-auto transition-transform duration-300 md:translate-x-0 translate-x-full shadow-2xl md:shadow-none bg-white md:bg-[rgba(136,108,232,0.1)]">
+            <nav id="sidebar-nav" class="mt-6 px-4 space-y-1"></nav>
+        </aside>
+
+        <main class="flex-1 md:mr-64 p-4 md:p-8 min-h-screen w-full">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-[24px] md:text-[28px] font-bold text-gray-800">إضافة كتاب جديد</h1>
+                    <p class="text-gray-500 text-sm mt-1">أدخل تفاصيل الكتاب الجديد لنشره في المكتبة</p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                    <button type="button" class="h-12 px-6 rounded-xl border-2 border-[#886CE8] text-[#886CE8] font-semibold hover:bg-[#886CE8]/5 transition bg-white">حفظ كمسودة</button>
+                    <button type="button" class="h-12 px-6 rounded-xl bg-[#886CE8] text-white font-semibold hover:bg-[#7758E6] transition shadow-md">حفظ ونشر</button>
+                </div>
+            </div>
+
+            <form>
+                <!-- بيانات الكتاب الأساسية -->
+                <div class="form-section">
+                    <h2 class="form-section-title">بيانات الكتاب الأساسية</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="field-label">عنوان الكتاب الرئيسي</label>
+                            <input type="text" class="field-input" placeholder="مثال: رحلة في أعماق المعرفة">
+                        </div>
+                        <div>
+                            <label class="field-label">عنوان الكتاب الفرعي</label>
+                            <input type="text" class="field-input" placeholder="مثال: رحلة في أعماق المعرفة">
+                        </div>
+                        <div>
+                            <label class="field-label">المؤلف</label>
+                            <div class="select-wrap">
+                                <select class="field-input field-select text-gray-500">
+                                    <option value="">اختر المؤلف</option>
+                                    <option>أحمد خالد</option>
+                                    <option>د. محمد القحطاني</option>
+                                    <option>سارة العتيبي</option>
+                                </select>
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="field-label">المترجم</label>
+                            <input type="text" class="field-input" placeholder="ادخل اسم المترجم">
+                        </div>
+                        <div>
+                            <label class="field-label">نوع العمل</label>
+                            <div class="select-wrap">
+                                <select class="field-input field-select text-gray-500">
+                                    <option value="">(Series)</option>
+                                    <option>رواية</option>
+                                    <option>مقالة</option>
+                                    <option>دراسة</option>
+                                </select>
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="field-label">السلسلة</label>
+                            <input type="text" class="field-input" placeholder="ادخل اسم السلسلة">
+                        </div>
+                        <div>
+                            <label class="field-label">التصنيف</label>
+                            <div class="select-wrap">
+                                <select class="field-input field-select text-gray-500">
+                                    <option value="">اختر الفئة</option>
+                                    <option>رواية</option>
+                                    <option>تقنية</option>
+                                    <option>تاريخ</option>
+                                    <option>أدب عربي</option>
+                                </select>
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="field-label">رقم ISBN</label>
+                            <input type="text" class="field-input" placeholder="000-00-0000-000-0" dir="ltr">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="field-label">وصف الكتاب</label>
+                            <textarea rows="5" class="w-full rounded-xl border border-gray-200 p-4 text-[15px] text-right resize-none focus:outline-none focus:border-[#886CE8] focus:ring-2 focus:ring-[#886CE8]/20" placeholder="اكتب ملخصاً وافياً عن محتوى الكتاب..."></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="field-label">الكلمات المفتاحية</label>
+                            <div class="keywords-wrap" id="keywordsContainer">
+                                <input type="text" id="keywordsInput" placeholder="أضف كلمات مفتاحية">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- أغلفة الكتاب -->
+                <div class="form-section">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="field-label mb-3">
+                                غلاف البداية
+                                <span class="info-icon" title="صورة الغلاف الأمامي للكتاب">i</span>
+                            </label>
+                            <label class="upload-box">
+                                <input type="file" accept="image/*" class="hidden">
+                                <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <span class="text-sm font-semibold text-gray-700">رفع صورة الغلاف</span>
+                            </label>
+                            <p class="text-xs text-gray-400 text-center mt-3">المقاس الموصى به: 1600 × 2400 بكسل</p>
+                        </div>
+                        <div>
+                            <label class="field-label mb-3">غلاف النهاية</label>
+                            <label class="upload-box">
+                                <input type="file" accept="image/*" class="hidden">
+                                <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <span class="text-sm font-semibold text-gray-700">رفع صورة الغلاف</span>
+                            </label>
+                            <p class="text-xs text-gray-400 text-center mt-3">المقاس الموصى به: 1600 × 2400 بكسل</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- التصنيف والتسعير -->
+                <div class="form-section">
+                    <h2 class="form-section-title">
+                        <svg class="w-5 h-5 text-[#886CE8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>
+                        التصنيف والتسعير
+                        <span class="info-icon" title="حدد نوع الكتاب وطريقة توزيعه">i</span>
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <label class="book-type-card selected">
+                            <input type="radio" name="bookType" value="new" checked>
+                            <div class="flex items-start gap-3">
+                                <svg class="w-6 h-6 text-[#886CE8] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                                <div>
+                                    <p class="font-bold text-gray-900 text-sm">إصدار حديث</p>
+                                    <p class="text-xs text-gray-500 mt-1">كتاب جديد لهذا العام (بيع فردي)</p>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="book-type-card">
+                            <input type="radio" name="bookType" value="classic">
+                            <div class="flex items-start gap-3">
+                                <svg class="w-6 h-6 text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                <div>
+                                    <p class="font-bold text-gray-900 text-sm">كتاب كلاسيكي</p>
+                                    <p class="text-xs text-gray-500 mt-1">متاح للمشتركين (حسب القراءة)</p>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="book-type-card">
+                            <input type="radio" name="bookType" value="free">
+                            <div class="flex items-start gap-3">
+                                <svg class="w-6 h-6 text-gray-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <div>
+                                    <p class="font-bold text-gray-900 text-sm">كتاب كلاسيكي / قديم</p>
+                                    <p class="text-xs text-gray-500 mt-1">متاح للجميع (مجاني)</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="field-label">
+                                تاريخ النشر
+                                <span class="info-icon" title="تاريخ نشر الكتاب">i</span>
+                            </label>
+                            <input type="date" class="field-input text-gray-500">
+                        </div>
+                        <div>
+                            <label class="field-label">سعر الكتاب (KWD)</label>
+                            <div class="price-input-wrap">
+                                <span class="currency">د.ك</span>
+                                <input type="number" step="0.01" class="field-input" placeholder="2.00" value="2.00">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ملف الكتاب الرقمي -->
+                <div class="form-section">
+                    <h2 class="form-section-title">
+                        <svg class="w-5 h-5 text-[#886CE8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        ملف الكتاب الرقمي
+                    </h2>
+                    <label class="upload-box min-h-[240px]">
+                        <input type="file" accept=".pdf,.epub" class="hidden">
+                        <svg class="w-14 h-14 text-blue-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                        <h3 class="text-[16px] font-bold text-gray-800 mb-2">اسحب وأفلت ملف الكتاب هنا</h3>
+                        <p class="text-gray-500 text-sm mb-5">يدعم صيغ PDF و ePub (الحد الأقصى 50 ميجابايت)</p>
+                        <span class="h-11 px-6 rounded-xl border border-gray-300 bg-white text-gray-700 font-semibold text-sm inline-flex items-center hover:bg-gray-50 transition">تصفح الملفات</span>
+                    </label>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="js/legal-nav.js"></script>
+    <script src="js/render-sidebar.js"></script>
+    <script src="js/book-form.js"></script>
+    <script>renderSidebar('books');</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+.form-section { background: #fff; border-radius: 16px; border: 1px solid #F3F4F6; box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: 24px; }
+.field-input { width: 100%; height: 52px; border-radius: 12px; border: 1px solid #E5E7EB; padding: 0 16px; font-size: 15px; text-align: right; background: #fff; }
+.field-input:focus { outline: none; border-color: #886CE8; box-shadow: 0 0 0 3px rgba(136,108,232,0.12); }
+.field-label { display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px; text-align: right; }
+.specialties-wrap { min-height: 52px; border: 1px solid #E5E7EB; border-radius: 12px; padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: #fff; }
+.specialties-wrap:focus-within { border-color: #886CE8; box-shadow: 0 0 0 3px rgba(136,108,232,0.12); }
+.specialties-wrap input { border: none; outline: none; flex: 1; min-width: 140px; height: 32px; font-size: 14px; text-align: right; background: transparent; }
+.specialty-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(136,108,232,0.12); color: #886CE8; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 8px; }
+.specialty-tag button { color: #886CE8; opacity: 0.7; line-height: 1; }
+.specialty-tag button:hover { opacity: 1; }
+.stat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.trend-badge { font-size: 12px; font-weight: 600; color: #16A34A; background: #F0FDF4; padding: 4px 10px; border-radius: 8px; }
+.status-toggle { width: 44px; height: 24px; border-radius: 999px; background: #22C55E; position: relative; cursor: pointer; flex-shrink: 0; }
+.status-toggle::after { content: ''; position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; background: #fff; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+.status-toggle.inactive { background: #D1D5DB; }
+.status-toggle.inactive::after { right: auto; left: 2px; }

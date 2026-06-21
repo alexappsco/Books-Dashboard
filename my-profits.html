@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أرباحي وإحصائيات القراءة - Youni</title>
+    <link href="css/output.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .header-bg { background: rgba(136, 108, 232, 1); }
+        .active-link { background: rgba(136, 108, 232, 0.3); font-weight: 700; }
+        .nav-link { font-size: 14px; font-weight: 500; transition: all 0.3s; }
+        .stat-card { background: #fff; border-radius: 16px; border: 1px solid #F3F4F6; box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: 20px 24px; }
+        .stat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .trend-badge { font-size: 12px; font-weight: 600; color: #16A34A; background: #F0FDF4; padding: 4px 10px; border-radius: 8px; }
+        .trend-text { font-size: 12px; font-weight: 600; color: #16A34A; }
+        .alert-banner { background: rgba(136,108,232,0.1); border: 1px solid rgba(136,108,232,0.2); border-radius: 12px; padding: 14px 20px; }
+        .profit-mechanism { background: linear-gradient(135deg, #1e3a5f 0%, #152a45 100%); border-radius: 16px; padding: 24px 28px; color: #fff; }
+        .profit-rate-box { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 20px 24px; text-align: center; min-width: 180px; }
+        .h-bar-track { height: 10px; background: #F3F4F6; border-radius: 999px; overflow: hidden; }
+        .h-bar-fill { height: 100%; border-radius: 999px; }
+        .dropdown-actions { display: none; position: absolute; left: 0; top: 40px; z-index: 9999; min-width: 140px; background: white; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid #f3f4f6; border-radius: 12px; }
+        .dropdown-actions.show { display: block; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="header-bg h-16 w-full flex items-center justify-between px-4 md:px-8 fixed top-0 z-[100]">
+        <div class="flex items-center"><img src="imgs/logoHeader.png" alt="Youni" class="h-8 md:h-10"></div>
+        <div class="flex items-center gap-4 text-white">
+            <div class="flex items-center gap-4 border-l pl-4 border-white/20">
+                <div class="relative cursor-pointer">
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-[10px] rounded-full px-1">1</span>
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden"><img src="https://ui-avatars.com/api/?name=User" alt=""></div>
+                    <span class="hidden md:block text-sm font-medium">اسم المستخدم</span>
+                </div>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-white"><svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        </div>
+    </header>
+
+    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-[80] hidden"></div>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="w-64 h-[calc(100vh-64px)] fixed right-0 top-16 z-[90] overflow-y-auto transition-transform duration-300 md:translate-x-0 translate-x-full shadow-2xl md:shadow-none bg-white md:bg-[rgba(136,108,232,0.1)]">
+            <nav id="sidebar-nav" class="mt-6 px-4 space-y-1"></nav>
+        </aside>
+
+        <main class="flex-1 md:mr-64 p-4 md:p-8 min-h-screen w-full">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-[24px] md:text-[28px] font-bold text-gray-800">أرباحي وإحصائيات القراءة</h1>
+                    <p class="text-gray-500 text-sm mt-1">متابعة دقيقة للأرباح ومعدلات القراءة الحالية عبر جميع الكتب المنشورة</p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                    <button type="button" class="h-11 px-5 rounded-xl border-2 border-[#886CE8] text-[#886CE8] font-semibold text-sm hover:bg-[#886CE8]/5 transition flex items-center gap-2 bg-white">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        تحميل PDF
+                    </button>
+                    <button type="button" class="h-11 px-5 rounded-xl bg-[#886CE8] text-white font-semibold text-sm hover:bg-[#7758E6] transition shadow-md flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        تصدير Excel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Row 1 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 mb-5">
+                <div class="stat-card">
+                    <div class="flex items-start justify-between gap-3 mb-4">
+                        <div class="stat-icon bg-blue-50">
+                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <span class="trend-badge">+12%</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">إجمالي الكتب المنشورة</p>
+                    <p class="text-2xl md:text-[28px] font-bold text-gray-900">1,240</p>
+                </div>
+                <div class="stat-card">
+                    <div class="flex items-start justify-between gap-3 mb-4">
+                        <div class="stat-icon bg-purple-50">
+                            <svg class="w-5 h-5 text-[#886CE8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <span class="trend-badge">+20%</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">إجمالي ساعات القراءة</p>
+                    <p class="text-2xl md:text-[28px] font-bold text-gray-900">12,500 <span class="text-lg font-semibold text-gray-600">ساعة</span></p>
+                </div>
+                <div class="stat-card">
+                    <div class="flex items-start justify-between gap-3 mb-4">
+                        <div class="stat-icon bg-green-50">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                        <span class="trend-badge">+8%</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">صافي الربح الشهري</p>
+                    <p class="text-2xl md:text-[28px] font-bold text-gray-900">45,000 <span class="text-lg font-semibold text-gray-600">د.ك</span></p>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 mb-6">
+                <div class="stat-card">
+                    <div class="flex items-start justify-between gap-3 mb-4">
+                        <div class="stat-icon bg-cyan-50">
+                            <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <span class="text-[11px] font-semibold text-[#886CE8]">تحديث كل دقيقة</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">عداد القراءة المباشر</p>
+                    <p class="text-2xl md:text-[28px] font-bold text-gray-900 mb-1">1,240</p>
+                    <p class="trend-text">+12% عن الأمس</p>
+                </div>
+                <div class="stat-card">
+                    <div class="flex items-start justify-between gap-3 mb-4">
+                        <div class="stat-icon bg-indigo-50">
+                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">إجمالي الصفحات المقروءة</p>
+                    <p class="text-2xl md:text-[28px] font-bold text-gray-900 mb-1">450,890 <span class="text-lg font-semibold text-gray-600">صفحة</span></p>
+                    <p class="trend-text">+5% هذا الشهر</p>
+                </div>
+                <div class="stat-card border-green-200 bg-green-50/30">
+                    <div class="flex items-start justify-between gap-3 mb-4">
+                        <div class="stat-icon bg-emerald-50">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-1">إجمالي الأرباح المستحقة</p>
+                    <p class="text-2xl md:text-[28px] font-bold text-green-700 mb-1">12,450.00 <span class="text-lg font-semibold text-green-600">د.ك</span></p>
+                    <p class="trend-text">+8% زيادة في العوائد</p>
+                </div>
+            </div>
+
+            <!-- تنبيه النظام -->
+            <div class="alert-banner flex items-start gap-3 mb-5">
+                <svg class="w-5 h-5 text-[#886CE8] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <p class="text-sm text-gray-700"><span class="font-bold text-[#886CE8]">تنبيه النظام:</span> سعر الربح المعتمد للصفحة هو <strong>0.05 د.ك</strong>. تم التحديث من قبل الإدارة بتاريخ اليوم.</p>
+            </div>
+
+            <!-- آلية احتساب الأرباح -->
+            <div class="profit-mechanism flex flex-col lg:flex-row items-center gap-6 mb-8">
+                <div class="profit-rate-box shrink-0">
+                    <p class="text-3xl font-bold mb-1">0.05</p>
+                    <p class="text-sm opacity-85">د.ك لكل صفحة صالحة</p>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-lg font-bold mb-2">آلية احتساب الأرباح</h2>
+                    <p class="text-sm opacity-90 leading-relaxed">يتم احتساب الأرباح بناءً على وقت القراءة الفعلي وعدد الكلمات المقروءة في كل صفحة. تُحتسب الصفحة كـ «صفحة صالحة» عند استيفاء معايير الجودة وسرعة القراءة المعتمدة من الإدارة.</p>
+                </div>
+            </div>
+
+            <!-- الرسوم البيانية -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 md:p-6 mb-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <button type="button" class="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition" title="تحديث">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        </button>
+                        <div class="relative">
+                            <select class="px-4 py-2.5 pr-8 rounded-xl border border-gray-200 bg-white text-sm text-gray-700 appearance-none focus:outline-none focus:border-[#886CE8]">
+                                <option>آخر 30 يوماً</option>
+                                <option>آخر 7 أيام</option>
+                                <option>آخر 90 يوماً</option>
+                            </select>
+                            <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </div>
+                        <div class="relative">
+                            <select class="px-4 py-2.5 pr-8 rounded-xl border border-gray-200 bg-white text-sm text-gray-700 appearance-none focus:outline-none focus:border-[#886CE8]">
+                                <option>جميع التصنيفات</option>
+                                <option>روايات</option>
+                                <option>تاريخ</option>
+                                <option>تنمية ذاتية</option>
+                            </select>
+                            <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- توزيع الأرباح -->
+                    <div>
+                        <h3 class="text-base font-bold text-gray-800 mb-5">توزيع الأرباح حسب التصنيف</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1.5"><span class="text-gray-600">روايات وقصص</span><span class="font-bold text-gray-900">42%</span></div>
+                                <div class="h-bar-track"><div class="h-bar-fill bg-[#886CE8]" style="width:42%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1.5"><span class="text-gray-600">تاريخ وسير ذاتية</span><span class="font-bold text-gray-900">28%</span></div>
+                                <div class="h-bar-track"><div class="h-bar-fill bg-blue-500" style="width:28%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1.5"><span class="text-gray-600">تنمية ذاتية</span><span class="font-bold text-gray-900">18%</span></div>
+                                <div class="h-bar-track"><div class="h-bar-fill bg-green-500" style="width:18%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1.5"><span class="text-gray-600">أخرى</span><span class="font-bold text-gray-900">12%</span></div>
+                                <div class="h-bar-track"><div class="h-bar-fill bg-gray-400" style="width:12%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- نمو القراء -->
+                    <div>
+                        <div class="flex items-start justify-between gap-3 mb-2">
+                            <h3 class="text-base font-bold text-gray-800">نمو عدد القراء</h3>
+                        </div>
+                        <p class="text-sm text-green-600 font-semibold mb-4">(+43%) أعلى من الشهر الماضي</p>
+                        <div class="relative h-48">
+                            <svg viewBox="0 0 400 160" class="w-full h-full" preserveAspectRatio="none">
+                                <line x1="30" y1="10" x2="30" y2="130" stroke="#E5E7EB" stroke-width="1"/>
+                                <line x1="30" y1="130" x2="390" y2="130" stroke="#E5E7EB" stroke-width="1"/>
+                                <line x1="30" y1="95" x2="390" y2="95" stroke="#F3F4F6" stroke-width="1" stroke-dasharray="4"/>
+                                <line x1="30" y1="60" x2="390" y2="60" stroke="#F3F4F6" stroke-width="1" stroke-dasharray="4"/>
+                                <line x1="30" y1="25" x2="390" y2="25" stroke="#F3F4F6" stroke-width="1" stroke-dasharray="4"/>
+                                <polyline points="50,110 80,95 110,85 140,70 170,55 200,40 230,50 260,65 290,55 320,40 350,35 380,25" fill="none" stroke="#886CE8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="50,110 80,95 110,85 140,70 170,55 200,40 230,50 260,65 290,55 320,40 350,35 380,25 380,130 50,130" fill="rgba(136,108,232,0.1)" stroke="none"/>
+                                <text x="50" y="148" font-size="8" fill="#9CA3AF" text-anchor="middle">Jan</text>
+                                <text x="110" y="148" font-size="8" fill="#9CA3AF" text-anchor="middle">Mar</text>
+                                <text x="170" y="148" font-size="8" fill="#9CA3AF" text-anchor="middle">May</text>
+                                <text x="230" y="148" font-size="8" fill="#9CA3AF" text-anchor="middle">Jul</text>
+                                <text x="290" y="148" font-size="8" fill="#9CA3AF" text-anchor="middle">Sep</text>
+                                <text x="350" y="148" font-size="8" fill="#9CA3AF" text-anchor="middle">Nov</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- جدول أداء المحتوى -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div class="p-4 md:p-6 border-b border-gray-100 flex items-center justify-between gap-4">
+                    <h2 class="text-lg font-bold text-gray-800">تفاصيل أداء المحتوى</h2>
+                    <a href="books-management.html" class="text-sm font-semibold text-[#886CE8] hover:underline">عرض الكل</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[1000px] text-right border-collapse">
+                        <thead class="bg-[#F4F6F8]">
+                            <tr class="text-gray-500 text-sm">
+                                <th class="p-4 w-12"><input type="checkbox" class="w-4 h-4 rounded border-gray-300"></th>
+                                <th class="p-4 font-bold">عنوان المقال</th>
+                                <th class="p-4 font-bold">التصنيف</th>
+                                <th class="p-4 font-bold">تاريخ الإضافة</th>
+                                <th class="p-4 font-bold">إجمالي القراءات</th>
+                                <th class="p-4 font-bold">متوسط وقت القراءة</th>
+                                <th class="p-4 font-bold">صافي الربح</th>
+                                <th class="p-4 font-bold w-16 text-center">العمليات</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                                <td class="p-4"><input type="checkbox" class="w-4 h-4 rounded border-gray-300"></td>
+                                <td class="p-4">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=60&h=80&fit=crop" alt="" class="w-10 h-14 rounded-md object-cover shrink-0 border border-gray-100">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">رواية: القتل للمبتدئين</p>
+                                            <p class="text-xs text-gray-400 mt-0.5">أحمد خالد</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-gray-600">أدب</td>
+                                <td class="p-4 text-gray-600 whitespace-nowrap">4/3/2026</td>
+                                <td class="p-4 font-semibold text-gray-900">4,520</td>
+                                <td class="p-4 text-gray-600">18 دقيقة</td>
+                                <td class="p-4 font-bold text-green-600">2,450 د.ك</td>
+                                <td class="p-4 text-center relative">
+                                    <button onclick="toggleActions(event)" class="p-2 hover:bg-gray-100 rounded-lg outline-none">
+                                        <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                                    </button>
+                                    <div class="dropdown-actions py-2">
+                                        <a href="book-details-admin.html" class="w-full text-right px-4 py-2 hover:bg-gray-100 transition flex items-center gap-3 text-gray-600 text-sm">عرض التفاصيل</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                                <td class="p-4"><input type="checkbox" class="w-4 h-4 rounded border-gray-300"></td>
+                                <td class="p-4">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=60&h=80&fit=crop" alt="" class="w-10 h-14 rounded-md object-cover shrink-0 border border-gray-100">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">رحلة في عالم التقنية</p>
+                                            <p class="text-xs text-gray-400 mt-0.5">د. أحمد المنصور</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-gray-600">تقنية</td>
+                                <td class="p-4 text-gray-600 whitespace-nowrap">12/8/2025</td>
+                                <td class="p-4 font-semibold text-gray-900">3,180</td>
+                                <td class="p-4 text-gray-600">22 دقيقة</td>
+                                <td class="p-4 font-bold text-green-600">1,890 د.ك</td>
+                                <td class="p-4 text-center relative">
+                                    <button onclick="toggleActions(event)" class="p-2 hover:bg-gray-100 rounded-lg outline-none">
+                                        <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                                    </button>
+                                    <div class="dropdown-actions py-2">
+                                        <a href="book-details-admin.html" class="w-full text-right px-4 py-2 hover:bg-gray-100 transition flex items-center gap-3 text-gray-600 text-sm">عرض التفاصيل</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50/50 transition-colors">
+                                <td class="p-4"><input type="checkbox" class="w-4 h-4 rounded border-gray-300"></td>
+                                <td class="p-4">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=60&h=80&fit=crop" alt="" class="w-10 h-14 rounded-md object-cover shrink-0 border border-gray-100">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">تاريخ العرب الحديث</p>
+                                            <p class="text-xs text-gray-400 mt-0.5">عبد الرحمن بدوي</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-gray-600">تاريخ</td>
+                                <td class="p-4 text-gray-600 whitespace-nowrap">20/1/2025</td>
+                                <td class="p-4 font-semibold text-gray-900">2,740</td>
+                                <td class="p-4 text-gray-600">15 دقيقة</td>
+                                <td class="p-4 font-bold text-green-600">1,320 د.ك</td>
+                                <td class="p-4 text-center relative">
+                                    <button onclick="toggleActions(event)" class="p-2 hover:bg-gray-100 rounded-lg outline-none">
+                                        <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                                    </button>
+                                    <div class="dropdown-actions py-2">
+                                        <a href="book-details-admin.html" class="w-full text-right px-4 py-2 hover:bg-gray-100 transition flex items-center gap-3 text-gray-600 text-sm">عرض التفاصيل</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-gray-100 text-sm text-gray-500">
+                    <div class="flex items-center gap-6">
+                        <div class="flex gap-4">
+                            <button class="hover:text-purple-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
+                            <button class="hover:text-purple-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                        </div>
+                        <span>1-6 من 12</span>
+                        <div class="flex items-center gap-2">
+                            <span>صفوف لكل صفحة:</span>
+                            <select class="bg-transparent font-semibold outline-none"><option>6</option><option>10</option><option>25</option></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="logoutModal" class="fixed inset-0 z-[999999] hidden bg-black/40 backdrop-blur-[2px] items-center justify-center p-4">
+        <div class="relative bg-white w-full max-w-[520px] rounded-[28px] px-8 py-10 shadow-2xl text-center">
+            <button onclick="closeLogoutModal()" class="absolute top-5 left-5 text-gray-500"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6L18 18M6 18L18 6"/></svg></button>
+            <img src="imgs/icons/out.svg" class="w-14 h-14 mx-auto mb-8" alt="">
+            <h2 class="text-xl font-bold text-gray-800 mb-10">هل أنت متأكد أنك تريد تسجيل الخروج؟</h2>
+            <div class="flex gap-4"><button class="flex-1 h-14 rounded-2xl bg-[#D91E18] text-white font-bold">نعم</button><button onclick="closeLogoutModal()" class="flex-1 h-14 rounded-2xl border-2 border-gray-500 text-gray-600 font-bold">إلغاء</button></div>
+        </div>
+    </div>
+    <script src="js/legal-nav.js"></script>
+    <script src="js/render-sidebar.js"></script>
+    <script>renderSidebar('profits');</script>
+</body>
+</html>
