@@ -1,0 +1,7 @@
+services:
+  books-dashboard:
+    build: .
+    container_name: books-dashboard
+    restart: unless-stopped
+    ports:
+      - "8085:80"
